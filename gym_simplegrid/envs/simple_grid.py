@@ -102,11 +102,11 @@ class SimpleGridEnv(Env):
         self.start_xy = self.parse_state_option('start_loc', options)
         self.goal_xy = self.parse_state_option('goal_loc', options)
 
-        self.start_human_xy = self.parse_state_option('human_start_loc', options)
+        # self.start_human_xy = self.parse_state_option('human_start_loc', options)
         
         # initialise internal vars
         self.agent_xy = self.start_xy
-        self.human_xy = self.start_human_xy
+        # self.human_xy = self.start_human_xy
         self.reward = self.get_reward(*self.agent_xy)
         self.done = self.on_goal()
         self.agent_action = None
@@ -136,12 +136,12 @@ class SimpleGridEnv(Env):
         target_col = col + dy
 
         # Get the current position of the human
-        row_h, col_h = self.human_xy
-        dx_h, dy_h = self.MOVES[action]
+        # row_h, col_h = self.human_xy
+        # dx_h, dy_h = self.MOVES[action]
 
         # Compute the target position of the human
-        target_human_row = row_h + dx_h
-        target_human_col = col_h + dy_h
+        # target_human_row = row_h + dx_h
+        # target_human_col = col_h + dy_h
         
         # Compute the reward
         self.reward = self.get_reward(target_row, target_col)
@@ -152,8 +152,8 @@ class SimpleGridEnv(Env):
             self.done = self.on_goal()
 
         # Check if the move is valid for human
-        if self.is_in_bounds(target_human_row, target_human_col) and self.is_free(target_human_row, target_human_col):
-            self.human_xy = (target_human_row, target_human_col)
+        # if self.is_in_bounds(target_human_row, target_human_col) and self.is_free(target_human_row, target_human_col):
+        #     self.human_xy = (target_human_row, target_human_col)
         
         self.n_iter += 1
 
@@ -313,7 +313,7 @@ class SimpleGridEnv(Env):
             self.fig.canvas.mpl_connect('close_event', self.close)
         else:
             self.update_agent_patch()
-            self.update_human_patch()
+            # self.update_human_patch()
         self.ax.set_title(f"Step: {self.n_iter}, Reward: {self.reward}")
     
     def create_agent_patch(self):
@@ -419,8 +419,8 @@ class SimpleGridEnv(Env):
         ax.add_patch(self.agent_patch)
 
         # Create human patch in start position
-        self.human_patch = self.create_human_patch()
-        ax.add_patch(self.human_patch)
+        # self.human_patch = self.create_human_patch()
+        # ax.add_patch(self.human_patch)
         return None
 
     def create_white_patch(self, x, y):
