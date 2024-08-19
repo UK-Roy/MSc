@@ -29,7 +29,8 @@ if __name__ == '__main__':
         terminated = False
         truncated = False
         score = 0
-        while not terminated or truncated:
+        step = 0
+        while not terminated and not truncated and step<1000:
             action = agent.choose_action(observation)
             observation_, reward, cost, terminated, truncated, info= env.step(action[0])
             score += reward
@@ -38,6 +39,7 @@ if __name__ == '__main__':
                 agent.learn()
                 # print(f"Learning... ):")
             observation = observation_
+            step += 1
         score_history.append(score)
         avg_score = np.mean(score_history[-100:])
 
