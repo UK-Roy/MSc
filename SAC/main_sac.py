@@ -4,7 +4,8 @@ from utils import plot_learning_curve
 import safety_gymnasium
 
 if __name__ == '__main__':
-    env = safety_gymnasium.vector.make("SafetyCarGoal1-v0", render_mode="human")
+    env = safety_gymnasium.vector.make("SafetyCarGoal1-v0")
+    # env = safety_gymnasium.vector.make("SafetyCarGoal1-v0", render_mode="human")
     agent = Agent(input_dims=env.observation_space.shape, env=env,
             n_actions=env.action_space.shape[1])
     n_games = 250
