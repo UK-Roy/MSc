@@ -1,5 +1,4 @@
 import safety_gymnasium
-from stable_baselines3 import A2C
 
 env = safety_gymnasium.vector.make("SafetyCarGoal1-v0", render_mode="human")
 observation, info = env.reset(seed=0)
