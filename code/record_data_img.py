@@ -7,14 +7,11 @@ import safety_gymnasium
 from gymnasium.utils.save_video import save_video
 
 directory_name = "SafetyCarGoalDataset"
-num_episode = 20
+num_episode = 5
 
 # Create the safety-task environment
 # env = safety_gymnasium.make("SafetyCarGoal1-v0", render_mode="human")
 env = safety_gymnasium.make("SafetyCarGoal2Vision-v0")
-# Reset the environment
-obs, info = env.reset(seed=1)
-terminated, truncated = False, False
 
 os.makedirs(directory_name, exist_ok=True)
 print(f"Directory '{directory_name}' created successfully.")
@@ -23,7 +20,10 @@ os.chdir(directory_name)
 episode = 1
 
 while episode < num_episode:
-    obs, info = env.reset()
+    
+    # Reset the environment
+    obs, info = env.reset(seed=1)
+    terminated, truncated = False, False
     
     sub_directory = f"{episode}"
     os.makedirs(sub_directory, exist_ok=True)
