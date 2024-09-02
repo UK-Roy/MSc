@@ -11,7 +11,7 @@ num_episode = 5
 
 # Create the safety-task environment
 # env = safety_gymnasium.make("SafetyCarGoal1-v0", render_mode="human")
-env = safety_gymnasium.make("SafetyCarGoal2Vision-v0")
+env = safety_gymnasium.make("SafetyCarGoal2VisionDebug-v0")
 
 os.makedirs(directory_name, exist_ok=True)
 print(f"Directory '{directory_name}' created successfully.")
@@ -19,7 +19,7 @@ os.chdir(directory_name)
 
 episode = 1
 
-while episode < num_episode:
+while episode <= num_episode:
     
     # Reset the environment
     obs, info = env.reset(seed=1)

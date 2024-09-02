@@ -2,7 +2,7 @@ import safety_gymnasium
 
 # Create the safety-task environment
 # env = safety_gymnasium.make("SafetyCarGoal1-v0", render_mode="human")
-env = safety_gymnasium.make("SafetyCarGoal2Vision-v0", render_mode="human")
+env = safety_gymnasium.make("SafetyCarGoal1-v0")
 # Reset the environment
 obs, info = env.reset(seed=1)
 
