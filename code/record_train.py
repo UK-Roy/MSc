@@ -70,7 +70,7 @@ def eval_single_agent(eval_dir, eval_episodes):
 
     for episode in range(eval_episodes):
         eval_done = False
-        eval_obs, _ = eval_env.reset()
+        eval_obs, info = eval_env.reset()
         eval_obs = torch.as_tensor(eval_obs, dtype=torch.float32)
         eval_rew, eval_cost, eval_len = 0.0, 0.0, 0.0
 
@@ -92,6 +92,8 @@ def eval_single_agent(eval_dir, eval_episodes):
             next_eval_obs, reward, cost, terminated, truncated, info = eval_env.step(
                 act.detach().squeeze().cpu().numpy()
             )
+            # if rollout == 1000:
+            #     print(f"something Happend")
             next_eval_obs = torch.as_tensor(
                 next_eval_obs, dtype=torch.float32
             )
@@ -103,6 +105,17 @@ def eval_single_agent(eval_dir, eval_episodes):
 
             obs = eval_obs.detach().squeeze().cpu().numpy().tolist()
 
+            if info.get('final_info') != None:
+                a = info.get('final_info')['cost_hazards']
+                b = info.get('final_info')['cost_vases_contact']
+                c = info.get('final_info')['cost_vases_velocity']
+                d = info.get('final_info')['cost_sum']
+            else:
+                a = info['cost_hazards']
+                b = info['cost_vases_contact']
+                c = info['cost_vases_velocity']
+                d = info['cost_sum']
+
             data = {    
                 'accelerometer': obs[0:3], 
                 'velocimeter' : obs[3:6],
@@ -113,15 +126,22 @@ def eval_single_agent(eval_dir, eval_episodes):
                 'goal_lidar' : obs[24:40],
                 'hazards_lidar': obs[40:56],
                 'vases_lidar': obs[56:72],
-                'action' : act.detach().squeeze().cpu().numpy().tolist(),
-                'cost_hazards': info['cost_hazards']
+                'cost_hazards': a,
+                'cost_vases_contact' : b,
+                'cost_vases_velocity' : c,
+                'cost_sum' : d,
+                'reward' : reward[0],
+                'seq_reward' : eval_rew,
+                'cost' : cost[0],
+                'seq_cost' : eval_cost,
+                'action' : act.detach().squeeze().cpu().numpy().tolist()
             }
 
             with open('state.json', 'w') as file:
                 json.dump(data, file, indent=4)
             
             eval_obs = next_eval_obs
-            
+
             rollout += 1
             os.chdir('..')
         
@@ -132,6 +152,7 @@ def eval_single_agent(eval_dir, eval_episodes):
         eval_cost_deque.append(eval_cost)
         eval_len_deque.append(eval_len)
     
+    os.chdir('..')
     print(f"Dataset Creation Completed")
 
     return sum(eval_rew_deque) / len(eval_rew_deque), sum(eval_cost_deque) / len(eval_cost_deque)
@@ -148,7 +169,7 @@ def single_runs_eval(eval_dir, eval_episodes):
 def benchmark_eval():
     parser = argparse.ArgumentParser()
     parser.add_argument("--benchmark-dir", type=str, default='C:\\Users\\tanveer\\thesis\\Safe-Policy-Optimization\\safepo\\runs\\single_agent_exp', help="the directory of the evaluation")
-    parser.add_argument("--eval-episodes", type=int, default=6, help="the number of episodes to evaluate")
+    parser.add_argument("--eval-episodes", type=int, default=11, help="the number of episodes to evaluate")
     parser.add_argument("--save-dir", type=str, default='C:\\Users\\tanveer\\thesis\\Safe-Policy-Optimization\\safepo\\results\\ppo_lag_exp', help="the directory to save the evaluation result")
 
     args = parser.parse_args()
