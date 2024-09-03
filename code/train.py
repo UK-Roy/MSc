@@ -13,8 +13,16 @@ hidden_size = 64
 num_epochs = 20  # size of number of epoch
 batch_size = 4  # size of each batch
 
+torch.manual_seed(42)
+
 device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
 print(f"Training at Device: {device}")
+
+# If you are using a GPU, set the seed for CUDA as well
+if device.type == 'cuda':
+    torch.cuda.manual_seed(42)
+    # torch.cuda.manual_seed_all(42)  # if you are using multi-GPU
+
 
 safety_net = SafetyModel(input_size=input_size, hidden_size=hidden_size).to(device=device)
 criterion = nn.BCELoss()
