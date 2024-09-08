@@ -8,7 +8,7 @@ from dataset import RobotSafetyDataset
 
 from tqdm import tqdm
 
-input_size = 74
+input_size = 50
 hidden_size = 64
 num_epochs = 20  # size of number of epoch
 batch_size = 4  # size of each batch
@@ -29,7 +29,7 @@ criterion = nn.BCELoss()
 optimizer = optim.Adam(safety_net.parameters(), lr=0.001)
 
 # Instantiate the dataset
-dataset = RobotSafetyDataset(root_dir=f'C:\\Users\\tanveer\\thesis\\safety-gymnasium-main\\SafetyCarGoalTrainDataset')
+dataset = RobotSafetyDataset(root_dir=f'C:\\Users\\tanveer\\thesis\\safety-gymnasium-main\\SafetyCarGoalTrainDatasetKeyboard')
 
 # Create a DataLoader for batching
 # Split lengths: 80% for training, 10% for validation and rest of the percentange for test
@@ -99,10 +99,10 @@ for epoch in range(num_epochs):
 
 
 # Save the trained safety network
-torch.save(safety_net.state_dict(), 'safety_model.pth')
+torch.save(safety_net.state_dict(), 'safety_model_manual.pth')
 
 # Load the trained safety network
-safety_net.load_state_dict(torch.load('safety_model.pth'))
+safety_net.load_state_dict(torch.load('safety_model_manual.pth'))
 
 # Set the model to evaluation mode
 safety_net.eval()

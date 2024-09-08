@@ -66,12 +66,12 @@ class RobotSafetyDataset(Dataset):
         based on the format of your data.
         """
         features = np.concatenate([
-            np.array(data_point['accelerometer']),
-            np.array(data_point['velocimeter']),
-            np.array(data_point['gyro']),
-            np.array(data_point['magnetometer']),
-            np.array(data_point['ballangvel_rear']),
-            np.array(data_point['ballquat_rear']),
+            # np.array(data_point['accelerometer']),
+            # np.array(data_point['velocimeter']),
+            # np.array(data_point['gyro']),
+            # np.array(data_point['magnetometer']),
+            # np.array(data_point['ballangvel_rear']),
+            # np.array(data_point['ballquat_rear']),
             np.array(data_point['goal_lidar']),
             np.array(data_point['hazards_lidar']),
             np.array(data_point['vases_lidar']),
