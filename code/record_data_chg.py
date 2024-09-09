@@ -14,7 +14,7 @@ action_list = []
 lidar_next_list = []
 
 # Number of steps for which you want to collect data
-num_steps = 5000
+num_steps = 50000
 
 for step in range(num_steps):
     # Extract current LiDAR readings from the observation

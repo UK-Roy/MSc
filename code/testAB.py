@@ -30,30 +30,22 @@ while cur_eps < episode_num:
     action = env.action_space.sample()  # Example: [F_left, F_right]
 
     # Predict the next LiDAR readings using the current A and B
-    L_current_new = np.array([L_current])  # Reshape for matrix multiplication
+    # L_current  # Reshape for matrix multiplication
     # Find indices where the LiDAR values are 0
-    zero_indices = np.where(L_current_new == 0)[0]  # Use np.where to find indices of zeros
-    action_new = np.array([action])        # Ensure the action has correct shape (1 x 2)
+    zero_indices = np.where(L_current == 0)  # Use np.where to find indices of zeros
+    action_new = np.array(action)        # Ensure the action has correct shape (1 x 2)
     
-    L_next_predicted = predict_lidar(L_current_new, action_new, A, B)
-    L_next_predicted[zero_indices] = 0.0
+    L_next_predicted = predict_lidar(L_current, action_new, A, B)
+    # L_next_predicted[zero_indices] = 0.0
 
     # Step the environment and observe the actual next LiDAR readings
     nxt_obs, reward, cost, terminated, truncated, info = env.step(action)
     L_next_actual = np.array([nxt_obs[40:72]])  # Actual next LiDAR readings
     
-    # Calculate the error between predicted and actual LiDAR readings
     error = L_next_actual - L_next_predicted
+    print(error)
     
-    # Update A and B using Stochastic Gradient Descent (SGD)
-    # Update rule: A = A + learning_rate * gradient
-    A_grad = -2 * (error.T @ L_current_new) / L_current_new.shape[0]
-    B_grad = -2 * (error.T @ action_new) / action_new.shape[0]
     
-    # Apply the updates to A and B
-    A -= learning_rate * A_grad
-    B -= learning_rate * B_grad
-
     # print("Updated A matrix:", A)
     # print("Updated B matrix:", B)
     
@@ -65,12 +57,12 @@ while cur_eps < episode_num:
         obs, info = env.reset()
         cur_eps += 1
 
-print("Learned A matrix:", A)
-print("Learned B matrix:", B)
+# print("Learned A matrix:", A)
+# print("Learned B matrix:", B)
 
 # Step 6: Save the matrices for future use
-np.save('A_matrix.npy', A)
-np.save('B_matrix.npy', B)
+# np.save('A_matrix.npy', A)
+# np.save('B_matrix.npy', B)
 
 # import numpy as np
 # import safety_gymnasium
