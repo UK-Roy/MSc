@@ -6,6 +6,8 @@ from scipy.optimize import minimize
 A = np.load('A_matrix.npy')  # Load the pre-trained A matrix
 B = np.load('B_matrix.npy')  # Load the pre-trained B matrix
 
+B_pseudo_inv = np.linalg.pinv(B)
+
 # Parameters
 SAFETY_THRESHOLD = 0.8  # Define a threshold for determining if the LiDAR value is too close (unsafe)
 optimizer_steps = 50  # Number of steps for optimizing the action
@@ -22,10 +24,9 @@ def unsafe(L_data, safety_threshold):
     return np.any(L_data >= safety_threshold)
 
 def safe_action(L_current, L_next_predicted, action):
-    while unsafe(L_data=L_current, safety_threshold=SAFETY_THRESHOLD):
+    if unsafe(L_data=L_next_predicted, safety_threshold=SAFETY_THRESHOLD):
         del_lidar_val = del_lidar(L_current=L_current, L_next_predicted=L_next_predicted)
         # Compute the pseudoinverse of A
-        B_pseudo_inv = np.linalg.pinv(B)
 
         # Calculate Delta x using the pseudoinverse
         del_x = np.dot(B_pseudo_inv, del_lidar_val)
